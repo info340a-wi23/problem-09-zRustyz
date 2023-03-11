@@ -9,9 +9,9 @@ import { MemoryRouter } from 'react-router';
 import { act } from 'react-dom/test-utils';
 
 // Console errors cause test failures
-console['error'] = (errorMessage) => { 
+console['error'] = (errorMessage) => {
   if(typeof errorMessage === "string"){ //why is sometimes not a string?
-    expect(errorMessage.split('\n', 1)[0]).toBe("") 
+    expect(errorMessage.split('\n', 1)[0]).toBe("")
   }
 }
 
@@ -38,7 +38,7 @@ const EXAMPLE_ALBUM_RESULTS = {results:[{
   artworkUrl100: "http://domain.com/albumC.jpg",
 }]};
 
-const EXAMPLE_TRACK_RESULTS = {results:[{wrapperType: "collection"}, 
+const EXAMPLE_TRACK_RESULTS = {results:[{wrapperType: "collection"},
 {
   trackId:101,
   artistName: "Artist A",
@@ -92,7 +92,7 @@ describe('The music search app', () => {
       //screen.debug();
       expect(screen.getAllByRole('img').length).toBe(3); //shows 3 testing albums
       EXAMPLE_ALBUM_RESULTS.results.forEach((eachAlbum) => {
-        let eachAlbumImage = screen.queryByAltText(eachAlbum.collectionName)        
+        let eachAlbumImage = screen.queryByAltText(eachAlbum.collectionName)
         expect(eachAlbumImage).toBeInTheDocument();
         expect(eachAlbumImage.src).toBe(eachAlbum.artworkUrl100);
       })
@@ -129,7 +129,7 @@ describe('The music search app', () => {
 
       expect(screen.queryByRole('alert')).toBeInTheDocument(); //shows error alert for rejected fetch
       expect(screen.queryByText(ERROR_MESSAGE)).toBeInTheDocument(); //shows error message
-      
+
       await userEvent.click(screen.queryByLabelText('Close alert')); //close the alert
 
       //test return empty
@@ -185,7 +185,7 @@ describe('The music search app', () => {
     })
 
     it('handles and displays errors', async () => {
-      const ERROR_MESSAGE = "Could not fetch tracks"
+      const ERROR_MESSAGE = "No tracks found for album."
       fetch.mockReject(new Error(ERROR_MESSAGE)) //fetches will be rejected
 
       let unmount;
@@ -196,7 +196,7 @@ describe('The music search app', () => {
 
       expect(screen.queryByRole('alert')).toBeInTheDocument(); //shows error alert for rejected fetch
       expect(screen.queryByText(ERROR_MESSAGE)).toBeInTheDocument(); //shows error message
-      
+
       await userEvent.click(screen.queryByLabelText('Close alert')); //close the alert
 
       //test return empty

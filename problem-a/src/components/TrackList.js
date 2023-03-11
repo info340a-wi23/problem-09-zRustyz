@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { useEffect } from 'react';
 
 const TRACK_QUERY_TEMPLATE = 'https://itunes.apple.com/lookup?id={collectionId}&limit=50&entity=song'
 
@@ -15,6 +16,21 @@ export default function TrackList({setAlertMessage}) { //setAlertMessage callbac
 
   //YOUR CODE GOES HERE
 
+  useEffect(() => {
+    const searchUrl = TRACK_QUERY_TEMPLATE.replace('{collectionId}', urlParams.collectionId);
+    setAlertMessage(null);
+    setIsQuerying(true);
+    fetch(searchUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.results.length === 0) {
+          setAlertMessage("No tracks found for album")
+        }
+        setTrackData(data.results.slice(1));
+      })
+      .catch(() => setAlertMessage("No tracks found for album"))
+      .then(() => setIsQuerying(false));
+  }, [urlParams.collectionId, setAlertMessage])
 
   //for fun: allow for clicking to play preview audio!
   const togglePlayingPreview = (previewUrl) => {
@@ -46,7 +62,7 @@ export default function TrackList({setAlertMessage}) { //setAlertMessage callbac
           <p className="track-artist">({track.artistName})</p>
         </div>
         <p className="text-center">Track {track.trackNumber}</p>
-      </div>      
+      </div>
     )
   })
 

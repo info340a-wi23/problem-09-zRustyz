@@ -12,6 +12,23 @@ const ALBUM_QUERY_TEMPLATE = "https://itunes.apple.com/search?limit=25&term={sea
 function App(props) {
   const [albumData, setAlbumData] = useState([]);
   const [alertMessage, setAlertMessage] = useState(null);
+  const [isSearching, setSearching] = useState(false);
+
+  function fetchAlbumList (searchTerm) {
+    const searchUrl = ALBUM_QUERY_TEMPLATE.replace('{searchTerm}', searchTerm);
+    setAlertMessage(null);
+    setSearching(true);
+    fetch(searchUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.results.length === 0) {
+          setAlertMessage("No results found.")
+        }
+        setAlbumData(data.results);
+      })
+      .catch((error) => setAlertMessage(error.message))
+      .then(() => setSearching(false));
+  }
 
   return (
     <div className="container">
@@ -30,7 +47,7 @@ function App(props) {
         <Routes>
           <Route path="/" element={
             <> {/* Search Page */}
-              <AlbumSearchForm />
+              <AlbumSearchForm searchCallback={fetchAlbumList} isWaiting={isSearching}/>
               <AlbumList albums={albumData} />
             </>
           } />
