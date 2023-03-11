@@ -185,7 +185,7 @@ describe('The music search app', () => {
     })
 
     it('handles and displays errors', async () => {
-      const ERROR_MESSAGE = "No tracks found for album."
+      const ERROR_MESSAGE = "Could not fetch tracks"
       fetch.mockReject(new Error(ERROR_MESSAGE)) //fetches will be rejected
 
       let unmount;
