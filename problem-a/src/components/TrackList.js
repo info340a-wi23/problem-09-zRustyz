@@ -18,13 +18,13 @@ export default function TrackList({setAlertMessage}) { //setAlertMessage callbac
 
   useEffect(() => {
     const searchUrl = TRACK_QUERY_TEMPLATE.replace('{collectionId}', urlParams.collectionId);
-    setAlertMessage(null);
     setIsQuerying(true);
+    setAlertMessage(null);
     fetch(searchUrl)
       .then((res) => res.json())
       .then((data) => {
         if (data.results.length === 0) {
-          setAlertMessage("No tracks found for album")
+          setAlertMessage("No tracks found for album.")
         }
         setTrackData(data.results.slice(1));
       })
