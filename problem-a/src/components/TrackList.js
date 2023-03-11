@@ -28,7 +28,7 @@ export default function TrackList({setAlertMessage}) { //setAlertMessage callbac
         }
         setTrackData(data.results.slice(1));
       })
-      .catch(() => setAlertMessage("No tracks found for album"))
+      .catch((error) => setAlertMessage(error.message))
       .then(() => setIsQuerying(false));
   }, [urlParams.collectionId, setAlertMessage])
 
